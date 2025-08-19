@@ -83,7 +83,12 @@ gcc calculatrice.o main.o -L./ -lm -o calculatrice
   ./calculatrice
 ```
 
-## Ci-dessous un exemple de compilation en image
+## Dans le cas avec un fichier Makefile, voici les commande à exécuter
+
+```bash
+  make clean
+  make run
+```
  
 ### Resultat
 - ![Second Branch](./capture/resultat.png)

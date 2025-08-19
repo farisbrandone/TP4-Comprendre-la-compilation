@@ -56,32 +56,36 @@ Dans cette phase :
 ```bash
 gcc calculatrice.o main.o -L./ -lm -o calculatrice
 ```
-- [comment]: # **`bash -L./`** permet de lier calculatrice.o à main.o et -lm pour lier main.o avec les librairies mathématique. 
+-  **`bash -L./`** permet de lier calculatrice.o à main.o et **`-lm`** pour lier main.o avec les librairies mathématique. 
 
- ### Si vous souhaiter n'activer que l'étape :
-    - de traitement par le preprocesseur pendant la compilation alors taper la commande suivante:
-    ```bash
-    gcc -E calculatrice.c -o calculatrice.i
-    ```
-    - de preprocesseur et de compilation et obtenir un fichier assembleur alors taper la commande suivante:
-    ```bash
-    gcc -S calculatrice.c -o calculatrice.s
-     ```
-    - produire des infos symbolique au deboguage pour une compilation complète en une seule fois
-    ```bash
-    gcc -g calculatrice.c -o calculatrice
-    ```
- ## Etape4: Exécution
+### Si vous souhaiter n'activer que l'étape :
  
- une fois l'etape de compilation terminer nous obtenons un fichier dit EXÉCUTABLE nommé calculatrice
+- de traitement par le preprocesseur pendant la compilation alors taper la commande suivante:
+    
+```bash
+    gcc -E calculatrice.c -o calculatrice.i
+```
+- de preprocesseur et de compilation et obtenir un fichier assembleur alors taper la commande suivante:
+```bash
+    gcc -S calculatrice.c -o calculatrice.s
+```
+- produire des infos symbolique au deboguage pour une compilation complète en une seule fois
+```bash
+    gcc -g calculatrice.c -o calculatrice
+```
+
+## Etape4: Exécution
+ 
+ une fois l'etape de compilation terminer nous obtenons un fichier dit   **`EXÉCUTABLE`** nommé `calculatrice`
  
  * Commande pour lancer l'exécutable
-    ```bash
+```bash
   ./calculatrice
-   ```
- Ci-dessous un exemple de compilation en image
+```
+
+## Ci-dessous un exemple de compilation en image
  
- ## Resultat
+### Resultat
 - ![Second Branch](./capture/resultat.png)
 
 

@@ -1,5 +1,4 @@
-# Makefile pour l'évaluateur d'expressions avec gestion de bibliothèques externes
-
+# Makefile for evaluation of expressions with handle extern library
 CC = gcc
 CFLAGS = -Wall -Wextra -g
 LDFLAGS = -lm

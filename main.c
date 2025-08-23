@@ -43,10 +43,10 @@ int main() {
         return 1;
     }
 
-    // Supprimer le saut de ligne
+    // Remove line break
     expr[strcspn(expr, "\n")] = 0;
 
-    double result = evaluate_expression(expr);
+    double result = evaluateExpression(expr);
     printf("Résultat: %f\n", result);
 
     return 0;

@@ -4,15 +4,15 @@
 
 #include <stdbool.h>
 
-#define MAX_TOKENS 100
-#define MAX_STACK 100
+#define MAXTOKENS 100
+#define MAXSTACK 100
 
 typedef enum {
     NUMBER,
     OPERATOR,
     FUNCTION,
-    LEFT_PAREN,
-    RIGHT_PAREN
+    LEFTPAREN,
+    RIGHTPAREN
 } TokenType;
 
 typedef struct {
@@ -21,11 +21,11 @@ typedef struct {
     double value;
 } Token;
 
-// Prototypes des fonctions
+// Prototypes of functions
 void tokenize(const char* expr);
-void fix_unary_minus();
-void shunting_yard();
-double eval_rpn();
-double evaluate_expression(const char* expr);
+void fixUnaryMinus();
+void shuntingYard();
+double evalRpn();
+double evaluateExpression(const char* expr);
 
 #endif

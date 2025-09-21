@@ -193,7 +193,7 @@ gcc -c -Wall -Wextra -O2 calculatrice.c -o calculatrice.o
 gcc -c -Wall -Wextra -O2 main.c -o main.o
 ```
 * Images associé
-- ![Second Branch](./capture/warning-commande.png)
+- ![Second Branch](./capture/warning-comande.png)
 
 ### Compilation3 : Compilation avec standard C11
 * Commande associé

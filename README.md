@@ -1,22 +1,21 @@
 # 🧮 Projet GDB
 
 ## Definition du gdb
-Commande permettant de débugger un programme, elle permet de:
-- s’arrêter durant l’exécution pour observer après chaque ligne exécutée, à un point d’arrêt placé préalablement, quand une condition devient vraie, lors de l’occurence d’une erreur.
-- observer l’état du programme durant son exécution:contenu des variables, valeur d’une expression, succession d’appels de fonction imbriqués
+Commande utiliser pour débugger un programme, elle permet de:
+- s’arrêter durant l’exécution pour **observer après chaque ligne exécutée**, **observer à un point d’arrêt placé préalablement**, **observer quand une condition devient vraie**, **observer lors de l’occurence d’une erreur**.
+- observer l’état du programme durant son exécution c'est a dire: **observer le contenu des variables**, **observer la valeur d’une expression**, **observer les successions d’appels de fonction imbriqués**.
 - Parcourir la pile d'appels
 - les valeurs en mémoire
 - Analyser les erreurs de segmentation
 
 
-## L'option -g de gcc et son lien avec le gdb
+## Option -g de gcc et son lien avec le gdb
 L'option -g de gcc génère des informations de débogage dans le fichier exécutable. Sans cette option, GDB ne peut pas :
 - Associer le code machine aux lignes de code source
 - Afficher les noms des variables
 - Montrer la structure du programme
 
 ## Compilation et Demarrage de gdb
-
 - installation de gdb
 ```bash
 sudo apt update
@@ -50,19 +49,20 @@ Ici nous illustrons par des images les différente étape de débogage du progra
 ### Etape2 : Fixation du point d'arret et affichage de la pile courante en execution
 - ![Second Branch](./capture/breakpoint-pilestack-debug2.png)
 
-* Sur cet image Au moment où nous sommes dans la function4 (juste avant l'accès hors limites),  nous avons 5 frames de la pile d'appels (Call Stack) en cour d'execution affiché.
-- Frame #0:la première frame tout au dessus d'indice #0 est la frame actuellement exécutée. cette frame contient **Adresse de retour** (où reprendre après la fonction), **Variables locales** (variables déclarées dans la fonction), **Paramètres** (arguments passés à la fonction), **Registres sauvegardés** (état du processeur)
+* Sur cet image, nous avons 5 frames de la pile d'appels (Call Stack) en cour d'execution affiché .
+- Frame #0:la première frame tout au dessus d'indice #0 est la frame actuellement exécutée. cette frame contient : **l'Adresse de retour** , **Variables locales** , **Paramètres** (arguments passés à la fonction), **Registres sauvegardés** (état du processeur)
 - Frame #1 : function3() - A appelé function4
 - Frame #2 : function2() - A appelé function3
 - Frame #3 : function1() - A appelé function2
 - Frame #4 : main() - Point de départ - A appelé function1
-on a commencé par main donc l'exécution à entrainer la création de la pile et son insertion comme 1 frame de la pile, ensuite main appele function1 qui est ajouté a la pile , qui lui meme appele f2 qui est egalement ajouté à la pile ect ect.'
 
+Danc cette pile, on a commencé par main donc l'exécution à entrainer la création de la pile et son insertion comme première frame de la pile, ensuite main a appelé function1 qui a été ajouté a la pile , et  lui meme a appelé f2 qui est egalement ajouté à la pile ect ect.'
 **Chaque appel de fonction ajoute un frame à la pile, et chaque retour enlève un frame. C'est le mécanisme LIFO (Last In, First Out) de la pile d'appels.**
 
 ## Etape 3 : Navigation dans la fonction d'arret qui contient le bug
 - ![Second Branch](./capture/stepover-next-debug3.png)
-Ici après avoir break sur la function4 et run nous somme maintenant a l'interieur de celleci. nous Exécutons la ligne courante à ligne courante avec next, sans entrer dans les fonctions appelées.
+Ici après avoir break sur la function4 et run nous somme maintenant a l'interieur de la function4. nous Exécutons de ligne d'instruction à ligne d'instruction grace à la commande `next` ceci sans entrer dans les fonctions appelées.
+
 - ![Second Branch](./capture/stepintoandout-debug5.png)
 Ici avec les commande `step(s)` pour exécuter et entrer dans les function appelé et `finish(fin)` pour Terminer l'exécution de la fonction courante et retourne au niveau appelant.
 

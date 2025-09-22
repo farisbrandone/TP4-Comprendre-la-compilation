@@ -28,7 +28,7 @@ Quand vous compilez avec gcc -g, le compilateur inclut des informations de débo
 * Numéros de ligne du code source
 
 
-3.  Compilation et Demarrage de gdb
+## 3.  Compilation et Demarrage de gdb
 
 ### Installation de gdb
 
@@ -56,17 +56,17 @@ gdb
 (gdb) file ./programme
 ```
 
-# 4. Etape de débogage
+## 4. Etape de débogage
 
 Ici nous illustrons par des images les différente étape de débogage du programme  avec des explications associées.
 
 ### a) Etape1 : Démarrer GDB
-
-- ![Second Branch](./capture/demarrage-debug.png)
+#### Image
+![Second Branch](./capture/demarrage-debug.png)
 
 ### b) Etape2 : Définir un point d'arrêt au niveau de la function4
-
-- ![Second Branch](./capture/breakpoint-pilestack-debug2.png)
+#### Image
+![Second Branch](./capture/breakpoint-pilestack-debug2.png)
 
 #### Sur cet image ci-dessus, nous avons 5 frames de la pile d'appels (Call Stack) en cour d'execution affiché .
 
@@ -93,19 +93,23 @@ Ici nous illustrons par des images les différente étape de débogage du progra
 - Chaque appel de fonction ajoute un frame à la pile, et chaque retour enlève un frame. C'est le mécanisme LIFO (Last In, First Out) de la pile d'appels.**
 
 ### c) Etape 3 : Navigation dans la fonction d'arret qui contient le bug
-- ![Second Branch](./capture/stepover-next-debug3.png)
+#### Image1
+![Second Branch](./capture/stepover-next-debug3.png)
 
 * Ici après avoir break sur la function4 et run nous somme maintenant a l'interieur de la function4.
 * nous Exécutons de ligne d'instruction à ligne d'instruction grace à la commande `next` ceci sans entrer dans les fonctions appelées.
-
-- ![Second Branch](./capture/stepintoandout-debug5.png)
+#### Image2
+![Second Branch](./capture/stepintoandout-debug5.png)
 
 * Ici avec les commande `step(s)` pour exécuter et entrer dans les function appelé
 * Et `finish(fin)` pour Terminer l'exécution de la fonction courante et retourne au niveau appelant.
 
 ### d) Etape4 : Track et debug sur la function4
-- ![Second Branch](./capture/breakpoint-inspect-debug4.png)
-- ![Second Branch](./capture/breakpoint-track-debug6.png)
+
+#### Image1
+![Second Branch](./capture/breakpoint-inspect-debug4.png)
+#### Image2
+![Second Branch](./capture/breakpoint-track-debug6.png)
 
 * Ici nous Inspectons les variables  de la pile,
 * accédons à leur valeur avec possibilite de modifier pour verification

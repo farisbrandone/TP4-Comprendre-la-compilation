@@ -1,6 +1,6 @@
 # 🧮 Projet GDB
 
-1. Qu'est-ce que GDB?
+## 1. Qu'est-ce que GDB?
 
 GDB (GNU Debugger) est un débogueur puissant qui permet d'analyser l'exécution d'un programme. Il vous permet de:
 
@@ -12,10 +12,10 @@ GDB (GNU Debugger) est un débogueur puissant qui permet d'analyser l'exécution
 
 * Modifier le comportement du programme pendant l'exécution
 
-2. Compilation avec l'option -g de GCC
+## 2. Compilation avec l'option -g de GCC
 L'option -g de GCC est cruciale pour utiliser GDB efficacement.
 
-## À quoi sert l'option -g?
+### À quoi sert l'option -g?
 
 Quand vous compilez avec gcc -g, le compilateur inclut des informations de débogage dans l'exécutable:
 
@@ -68,25 +68,23 @@ Ici nous illustrons par des images les différente étape de débogage du progra
 
 - ![Second Branch](./capture/breakpoint-pilestack-debug2.png)
 
-* Sur cet image, nous avons 5 frames de la pile d'appels (Call Stack) en cour d'execution affiché .
+#### Sur cet image ci-dessus, nous avons 5 frames de la pile d'appels (Call Stack) en cour d'execution affiché .
 
-- Frame #0:la première frame tout au dessus d'indice #0 est la frame actuellement exécutée. cette frame contient :
-
-**l'Adresse de retour** ,
-
-**Des Variables locales** ,
-
-**Des Paramètres** (arguments passés à la fonction),
-
-**Des Registres sauvegardés** (état du processeur)
-
+- Frame #0:la première frame tout au dessus d'indice #0 est la frame actuellement exécutée.
 - Frame #1 : function3() - A appelé function4
 - Frame #2 : function2() - A appelé function3
 - Frame #3 : function1() - A appelé function2
 - Frame #4 : main() - Point de départ - A appelé function1
 
-#### Explication:
-Danc cette pile:
+#### chaque frame peut contenir :
+= l'Adresse de retour ,
+= Des Variables locales ,
+= Des Paramètres (arguments passés à la fonction),
+= Des Registres sauvegardés** (état du processeur)
+
+#### Explication du fonctionnement de la pile en image ci-dessus:
+
+ Danc cette pile:
 - On a commencé par main donc l'exécution à entrainer la création de la pile et son insertion comme première frame de la pile,
 - Ensuite main a appelé la function1 qui a été ajouté a la pile ,
 - Et la function1 lui meme a appelé la function2 qui a été ajouté à la pile ,
@@ -105,7 +103,7 @@ Danc cette pile:
 * Ici avec les commande `step(s)` pour exécuter et entrer dans les function appelé
 * Et `finish(fin)` pour Terminer l'exécution de la fonction courante et retourne au niveau appelant.
 
-## d) Etape4 : Track et debug sur la function4
+### d) Etape4 : Track et debug sur la function4
 - ![Second Branch](./capture/breakpoint-inspect-debug4.png)
 - ![Second Branch](./capture/breakpoint-track-debug6.png)
 

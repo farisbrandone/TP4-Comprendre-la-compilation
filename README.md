@@ -1,28 +1,41 @@
 # 🧮 Projet GDB
 
-## Definition du gdb
-Commande utiliser pour débugger un programme, elle permet de:
-- s’arrêter durant l’exécution pour **observer après chaque ligne exécutée**, **observer à un point d’arrêt placé préalablement**, **observer quand une condition devient vraie**, **observer lors de l’occurence d’une erreur**.
-- observer l’état du programme durant son exécution c'est a dire: **observer le contenu des variables**, **observer la valeur d’une expression**, **observer les successions d’appels de fonction imbriqués**.
-- Parcourir la pile d'appels
-- les valeurs en mémoire
-- Analyser les erreurs de segmentation
+1. Qu'est-ce que GDB?
+GDB (GNU Debugger) est un débogueur puissant qui permet d'analyser l'exécution d'un programme. Il vous permet de:
+
+* Exécuter un programme pas à pas
+
+* Examiner ce qui se passe quand le programme plante
+
+* Vérifier les valeurs des variables à un moment donné
+
+* Modifier le comportement du programme pendant l'exécution
+
+2. Compilation avec l'option -g de GCC
+L'option -g de GCC est cruciale pour utiliser GDB efficacement.
+
+## À quoi sert l'option -g?
+Quand vous compilez avec gcc -g, le compilateur inclut des informations de débogage dans l'exécutable:
+
+* Table des symboles (noms des variables et fonctions)
+
+* Correspondance entre le code machine et le code source
+
+* Informations sur les types de données
+
+* Numéros de ligne du code source
 
 
-## Option -g de gcc et son lien avec le gdb
-L'option -g de gcc génère des informations de débogage dans le fichier exécutable. Sans cette option, GDB ne peut pas :
-- Associer le code machine aux lignes de code source
-- Afficher les noms des variables
-- Montrer la structure du programme
+3.  Compilation et Demarrage de gdb
 
-## Compilation et Demarrage de gdb
-- installation de gdb
+### Installation de gdb
+
 ```bash
 sudo apt update
 sudo apt install gdb
 ```
 
-- Associer le code machine aux lignes de code source, lancer gdb et attacher le fichier programme à exécuter
+### Compilation avec l'option -g
 ```
 # Avec informations de débogage (recommandé)
 gcc -g programme.c -o programme
@@ -40,13 +53,14 @@ gdb
 (gdb) file ./programme
 ```
 
-## Etape de débogage
+4. Etape de débogage
+
 Ici nous illustrons par des images les différente étape de débogage du programme  avec des explications associées.
 
-### Etape1 : Demarage du gdb et exécution du fichier programme dans le gdb
+### a) Etape1 : Démarrer GDB
 - ![Second Branch](./capture/demarrage-debug.png)
 
-### Etape2 : Fixation du point d'arret et affichage de la pile courante en execution
+### b) Etape2 : Définir un point d'arrêt au niveau de la function4
 - ![Second Branch](./capture/breakpoint-pilestack-debug2.png)
 
 * Sur cet image, nous avons 5 frames de la pile d'appels (Call Stack) en cour d'execution affiché .
@@ -56,29 +70,41 @@ Ici nous illustrons par des images les différente étape de débogage du progra
 - Frame #3 : function1() - A appelé function2
 - Frame #4 : main() - Point de départ - A appelé function1
 
-Danc cette pile, on a commencé par main donc l'exécution à entrainer la création de la pile et son insertion comme première frame de la pile, ensuite main a appelé function1 qui a été ajouté a la pile , et  lui meme a appelé f2 qui est egalement ajouté à la pile ect ect.'
-**Chaque appel de fonction ajoute un frame à la pile, et chaque retour enlève un frame. C'est le mécanisme LIFO (Last In, First Out) de la pile d'appels.**
+### Explication:
+Danc cette pile:
+- On a commencé par main donc l'exécution à entrainer la création de la pile et son insertion comme première frame de la pile,
+- Ensuite main a appelé la function1 qui a été ajouté a la pile ,
+- Et la function1 lui meme a appelé la function2 qui a été ajouté à la pile ,
+- La function2 a appelé la function 3 qui a été ajouté à la pile
+- Ceci jusqu'à la dernière function à retourner une valeur qui sera suprimer de la file et sa valeur transmise à la function appelante.
+- Chaque appel de fonction ajoute un frame à la pile, et chaque retour enlève un frame. C'est le mécanisme LIFO (Last In, First Out) de la pile d'appels.**
 
-## Etape 3 : Navigation dans la fonction d'arret qui contient le bug
+## c) Etape 3 : Navigation dans la fonction d'arret qui contient le bug
 - ![Second Branch](./capture/stepover-next-debug3.png)
-Ici après avoir break sur la function4 et run nous somme maintenant a l'interieur de la function4. nous Exécutons de ligne d'instruction à ligne d'instruction grace à la commande `next` ceci sans entrer dans les fonctions appelées.
+
+* Ici après avoir break sur la function4 et run nous somme maintenant a l'interieur de la function4.
+* nous Exécutons de ligne d'instruction à ligne d'instruction grace à la commande `next` ceci sans entrer dans les fonctions appelées.
 
 - ![Second Branch](./capture/stepintoandout-debug5.png)
-Ici avec les commande `step(s)` pour exécuter et entrer dans les function appelé et `finish(fin)` pour Terminer l'exécution de la fonction courante et retourne au niveau appelant.
+
+* Ici avec les commande `step(s)` pour exécuter et entrer dans les function appelé
+* Et `finish(fin)` pour Terminer l'exécution de la fonction courante et retourne au niveau appelant.
 
 ## Track et debug sur la function4
 - ![Second Branch](./capture/breakpoint-inspect-debug4.png)
 - ![Second Branch](./capture/breakpoint-track-debug6.png)
-Ici nous Inspectons les variables et de la pile, accedons à leir valeur avec possibilite de modifier pour verification
 
-## Commande essentiel pour le traquage pas à pas
+* Ici nous Inspectons les variables  de la pile,
+* accédons à leur valeur avec possibilite de modifier pour verification
+
+5. Commande essentiel pour le traquage pas à pas
 ```bash
 next (n) : Exécute la ligne suivante (ne rentre pas dans les fonctions)
 step (s) : Exécute la ligne suivante (rentre dans les fonctions)
 stepi (si) : Exécute l'instruction machine suivante (le plus granulaire)
 ```
 
-## Analyse après l'erreur Si le programme plante :
+6. Analyse après l'erreur Si le programme plante :
 ```bash
 (gdb) backtrace full  # Pile d'appels avec variables locales
 (gdb) info registers  # État des registres au moment du crash
@@ -86,7 +112,7 @@ stepi (si) : Exécute l'instruction machine suivante (le plus granulaire)
 (gdb) info frame      # Informations sur le frame actuel
 ```
 
-## Points d'arrêt conditionnels et Utilisation de watch pour surveiller la mémoire
+7. Points d'arrêt conditionnels et Utilisation de watch pour surveiller la mémoire
 ```bash
 (gdb) watch *(int*)0x7fffffffdc28  # Surveiller l'adresse de tableau[10]
 (gdb) continue  # S'arrêtera quand cette mémoire sera lue/écrite
@@ -94,7 +120,7 @@ stepi (si) : Exécute l'instruction machine suivante (le plus granulaire)
 (gdb) break 29 if i == 10  # S'arrêter à la ligne 29 seulement quand i vaut 10
 ```
 
-### Commande avancé
+8. Commande avancé
 
 - Points d'arrêt conditionnels
 ```bash

@@ -1,97 +1,124 @@
-# 🧮 Projet Calculatrice
+# 🧮 Projet GDB
 
-Dans ce projet nous avons mis en place un programme écrit en C qui permet de faire des opérations suivantes :
-- **Arithmétique simple** (+, -, *, /)
-- **Trigonométrie**
-- **Fonctions logarithmiques**
+## Definition du gdb
+Commande permettant de débugger un programme, elle permet de:
+- s’arrêter durant l’exécution pour observer après chaque ligne exécutée, à un point d’arrêt placé préalablement, quand une condition devient vraie, lors de l’occurence d’une erreur.
+- observer l’état du programme durant son exécution:contenu des variables, valeur d’une expression, succession d’appels de fonction imbriqués
+- Parcourir la pile d'appels
+- les valeurs en mémoire
+- Analyser les erreurs de segmentation
 
----
 
-## 📁 Etape 0 : Structure du projet
+## L'option -g de gcc et son lien avec le gdb
+L'option -g de gcc génère des informations de débogage dans le fichier exécutable. Sans cette option, GDB ne peut pas :
+- Associer le code machine aux lignes de code source
+- Afficher les noms des variables
+- Montrer la structure du programme
 
-Le projet comporte les fichiers suivants issus des programmes écrits et de la compilation :
-`calculatrice.h`, `calculatrice.c`, `main.c`, `calculatrice.o`, `main.o`
+## Compilation et Demarrage de gdb
 
-*   **`calculatrice.h`** (extension `.h`) : utilisé pour la déclaration des fonctions et structures
-*   **`calculatrice.c`** (extension `.c`) : utilisé pour l'implémentation des fonctions issues de `calculatrice.h`
-*   **`main.c`** : programme principal, point d'entrée pour l'utilisateur, lieu d'appel des différentes fonctions déclarées dans `calculatrice.c`. C'est le fichier qui réalise les instructions d'exécution.
-
-Suivez les étapes ci-dessous et exécutez les commandes suivantes pour compiler le programme enfin d'effectuer les opérations.
-
----
-
-## 🚀 Etape 1 : Cloner le repository
-
+- installation de gdb
 ```bash
-git clone git@github.com:farisbrandone/TP4-Comprendre-la-compilation.git
-cd TP4-Comprendre-la-compilation
+sudo apt update
+sudo apt install gdb
 ```
 
-## Étape 2 : Explorer la structure du projet
-
-```bash
-ls -la
+- Associer le code machine aux lignes de code source, lancer gdb et attacher le fichier programme à exécuter
 ```
-## Phase 1 : Compilation
+# Avec informations de débogage (recommandé)
+gcc -g programme.c -o programme
 
-Cette phase permet d'obtenir le fichier object (.o) et comporte :
-- Le traitement par le préprocesseur
-- La compilation proprement dite
-- L'assemblage
+# Avec plus d'informations de débogage
+gcc -g3 programme.c -o programme
 
-### Commandes à exécuter (dans le dossier du projet) :
+# Désactiver l'optimisation (recommandé pour le debug)
+gcc -g -O0 programme.c -o programme
+# Lancer GDB avec votre programme
+gdb ./programme
 
-```bash
-gcc -c calculatrice.c -o calculatrice.o
-gcc -c main.c -o main.o
-```
-## Phase 2 : Édition des liens
-
-Dans cette phase :
-- Les fichiers object obtenus de la compilation sont liés entre eux
-- Sont ajoutés les fichiers objects correspondants aux librairies précompilées ayant pour extension (.a)
-
-### Commande à exécuter :
-
-```bash
-gcc calculatrice.o main.o -L./ -lm -o calculatrice
-```
--  **`bash -L./`** permet de lier calculatrice.o à main.o et **`-lm`** pour lier main.o avec les librairies mathématique. 
-
-### Si vous souhaiter n'activer que l'étape :
- 
-- de traitement par le preprocesseur pendant la compilation alors taper la commande suivante:
-    
-```bash
-    gcc -E calculatrice.c -o calculatrice.i
-```
-- de preprocesseur et de compilation et obtenir un fichier assembleur alors taper la commande suivante:
-```bash
-    gcc -S calculatrice.c -o calculatrice.s
-```
-- produire des infos symbolique au deboguage pour une compilation complète en une seule fois
-```bash
-    gcc -g calculatrice.c -o calculatrice
+# Ou lancer GDB puis charger le programme
+gdb
+(gdb) file ./programme
 ```
 
-## Etape4: Exécution
- 
- une fois l'etape de compilation terminer nous obtenons un fichier dit   **`EXÉCUTABLE`** nommé `calculatrice`
- 
- * Commande pour lancer l'exécutable
+## Etape de débogage
+Ici nous illustrons par des images les différente étape de débogage du programme  avec des explications associées.
+
+### Etape1 : Demarage du gdb et exécution du fichier programme dans le gdb
+- ![Second Branch](./capture/demarrage-debug.png)
+
+### Etape2 : Fixation du point d'arret et affichage de la pile courante en execution
+- ![Second Branch](./capture/breakpoint-pilestack-debug2.png)
+
+* Sur cet image Au moment où nous sommes dans la function4 (juste avant l'accès hors limites),  nous avons 5 frames de la pile d'appels (Call Stack) en cour d'execution affiché.
+- Frame #0:la première frame tout au dessus d'indice #0 est la frame actuellement exécutée. cette frame contient **Adresse de retour** (où reprendre après la fonction), **Variables locales** (variables déclarées dans la fonction), **Paramètres** (arguments passés à la fonction), **Registres sauvegardés** (état du processeur)
+- Frame #1 : function3() - A appelé function4
+- Frame #2 : function2() - A appelé function3
+- Frame #3 : function1() - A appelé function2
+- Frame #4 : main() - Point de départ - A appelé function1
+on a commencé par main donc l'exécution à entrainer la création de la pile et son insertion comme 1 frame de la pile, ensuite main appele function1 qui est ajouté a la pile , qui lui meme appele f2 qui est egalement ajouté à la pile ect ect.'
+
+**Chaque appel de fonction ajoute un frame à la pile, et chaque retour enlève un frame. C'est le mécanisme LIFO (Last In, First Out) de la pile d'appels.**
+
+## Etape 3 : Navigation dans la fonction d'arret qui contient le bug
+- ![Second Branch](./capture/stepover-next-debug3.png)
+Ici après avoir break sur la function4 et run nous somme maintenant a l'interieur de celleci. nous Exécutons la ligne courante à ligne courante avec next, sans entrer dans les fonctions appelées.
+- ![Second Branch](./capture/stepintoandout-debug5.png)
+Ici avec les commande `step(s)` pour exécuter et entrer dans les function appelé et `finish(fin)` pour Terminer l'exécution de la fonction courante et retourne au niveau appelant.
+
+## Track et debug sur la function4
+- ![Second Branch](./capture/breakpoint-inspect-debug4.png)
+- ![Second Branch](./capture/breakpoint-track-debug6.png)
+Ici nous Inspectons les variables et de la pile, accedons à leir valeur avec possibilite de modifier pour verification
+
+## Commande essentiel pour le traquage pas à pas
 ```bash
-  ./calculatrice
+next (n) : Exécute la ligne suivante (ne rentre pas dans les fonctions)
+step (s) : Exécute la ligne suivante (rentre dans les fonctions)
+stepi (si) : Exécute l'instruction machine suivante (le plus granulaire)
 ```
 
-## Dans le cas avec un fichier Makefile, voici les commande à exécuter
-
+## Analyse après l'erreur Si le programme plante :
 ```bash
-  make clean
-  make run
+(gdb) backtrace full  # Pile d'appels avec variables locales
+(gdb) info registers  # État des registres au moment du crash
+(gdb) x/10i $pc-20    # Instructions autour du pointeur d'instruction
+(gdb) info frame      # Informations sur le frame actuel
 ```
- 
-### Resultat
-- ![Second Branch](./capture/resultat.png)
 
+## Points d'arrêt conditionnels et Utilisation de watch pour surveiller la mémoire
+```bash
+(gdb) watch *(int*)0x7fffffffdc28  # Surveiller l'adresse de tableau[10]
+(gdb) continue  # S'arrêtera quand cette mémoire sera lue/écrite
+(gdb) break function4 if tableau[2] == 3
+(gdb) break 29 if i == 10  # S'arrêter à la ligne 29 seulement quand i vaut 10
+```
 
+### Commande avancé
+
+- Points d'arrêt conditionnels
+```bash
+ (gdb) break 10 if i == 2    # S'arrêter seulement quand i == 2
+(gdb) condition 1 temp > 10 # Ajouter condition au breakpoint #1
+```
+
+- Watchpoints (surveillance de variables)
+```bash
+ (gdb) watch temp            # S'arrêter quand 'temp' change
+(gdb) rwatch temp           # S'arrêter quand 'temp' est lu
+(gdb) awatch temp           # S'arrêter quand 'temp' est lu ou écrit
+```
+
+- Examiner la mémoire
+```bash
+ (gdb) x/10i $pc            # 10 instructions à partir du PC
+(gdb) x/4wx &variable      # 4 mots en hexa à l'adresse de variable
+(gdb) disassemble          # Code assembleur de la fonction courante
+```
+
+- Modifier des valeurs
+```bash
+(gdb) set variable = nouvelle_valeur
+(gdb) set temp = 100       # Changer la valeur de temp
+```
 

@@ -1,4 +1,3 @@
-
 #ifndef FUNCTIONS_H
 #define FUNCTIONS_H
 
@@ -21,11 +20,12 @@ typedef struct {
     double value;
 } Token;
 
-// Prototypes of functions
-void tokenize(const char* expr);
-void fixUnaryMinus();
-void shuntingYard();
-double evalRpn();
-double evaluateExpression(const char* expr);
+/*typedef struct  {
+    Token tokens[MAXTOKENS];
+    Token outputQueue[MAXTOKENS]
+    int tokenCount;
+    } shuntingYardReturn;*/
+
+void shuntingYard(Token *tokens, Token *outputQueue, Token *opStack , double *evalStack ,int *tokenCount, int *evalTop);
 
 #endif

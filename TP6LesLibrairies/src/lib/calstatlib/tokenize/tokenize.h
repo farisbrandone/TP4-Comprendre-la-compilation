@@ -20,12 +20,12 @@ typedef struct {
     double value;
 } Token;
 
-/*typedef struct  {
+typedef struct  {
 
     Token tokens[MAXTOKENS];
     int tokenCount;
-    } TokenizeReturn;*/
+    } TokenizeReturn;
 // Prototypes of functions
-void tokenize(const char* expr, Token *tokens);
+TokenizeReturn tokenize(const char* expr, Token *tokens);
 
 #endif

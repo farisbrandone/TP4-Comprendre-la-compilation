@@ -13,7 +13,8 @@ int tokenCount = 0;*/
 
 
 // Tokenisation
-void tokenize(const char* expr, Token *tokens) {
+TokenizeReturn tokenize(const char* expr, Token *tokens) {
+     fprintf(stderr,"Inside Tokenize with '%c'\n", *expr);
     const char* p = expr;
    int tokenCount = 0;
 
@@ -81,7 +82,10 @@ void tokenize(const char* expr, Token *tokens) {
 
         fprintf(stderr, "Erreur: Caractère non reconnu '%c'\n", *p);
 
-         /*TokenizeReturn result;
+
+        exit(1);
+    }
+      TokenizeReturn result;
 
         result.tokenCount=tokenCount;
         int tokensArrayLength = sizeof(tokens) / sizeof(tokens[0]); // Calcul de la taille
@@ -89,10 +93,8 @@ void tokenize(const char* expr, Token *tokens) {
         // Boucle for pour parcourir le tableau
         for (int i = 0; i < tokensArrayLength; i++) {
             // Instructions à exécuter pour chaque élément
-           result.tokens[i]=tokens[i]
+           result.tokens[i]=tokens[i];
         }
 
-       return result;*/
-        exit(1);
-    }
+       return result;
 }

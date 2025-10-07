@@ -20,12 +20,12 @@ typedef struct {
     double value;
 } Token;
 
-/*typedef struct  {
+typedef struct  {
     Token tokens[MAXTOKENS];
-    Token outputQueue[MAXTOKENS]
+    Token outputQueue[MAXTOKENS];
     int tokenCount;
-    } shuntingYardReturn;*/
+    } shuntingYardReturn;
 
-void shuntingYard(Token *tokens, Token *outputQueue, Token *opStack , double *evalStack ,int *tokenCount, int *evalTop);
+shuntingYardReturn shuntingYard(Token *tokens, Token *outputQueue, Token *opStack  ,int tokenCount, int evalTop);
 
 #endif

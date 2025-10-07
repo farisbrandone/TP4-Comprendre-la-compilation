@@ -20,6 +20,6 @@ typedef struct {
     double value;
 } Token;
 
-double evalRpn(Token *outputQueue,   double *evalStack, int *outputCount);
+double evalRpn(Token *outputQueue,   double *evalStack, int outputCount);
 
 #endif

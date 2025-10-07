@@ -17,8 +17,8 @@ int opTop = -1;
 int evalTop = -1;*/
 
 // Fonctions of pile
-void pushOp(Token token, Token *opStack ,int *opTop) { opStack[++*opTop] = token; }
-Token popOp(Token *opStack ,int *opTop) { return opStack[*opTop--]; }
+void pushOp(Token token, Token *opStack ,int opTop) { opStack[++opTop] = token; }
+Token popOp(Token *opStack ,int opTop) { return opStack[opTop--]; }
 
 
 // Priority of operators
@@ -39,11 +39,12 @@ Associativity getAssociativity(char* op) {
 
 
 // Shunting Yard
-void shuntingYard(Token *tokens, Token *outputQueue, Token *opStack , double *evalStack ,int *tokenCount, int *evalTop) {
+shuntingYardReturn shuntingYard(Token *tokens, Token *outputQueue, Token *opStack  ,int tokenCount, int evalTop) {
+      printf("Inside shuntingYard with Integer: %d, Integer: %d\n", tokenCount, evalTop);
    int outputCount = 0;
    int opTop = -1;
 
-    for (int i = 0; i < *tokenCount; i++) {
+    for (int i = 0; i < tokenCount; i++) {
         Token t = tokens[i];
 
         switch (t.type) {
@@ -52,7 +53,7 @@ void shuntingYard(Token *tokens, Token *outputQueue, Token *opStack , double *ev
                 break;
 
             case FUNCTION:
-                pushOp(t, opStack, &opTop);
+                pushOp(t, opStack, opTop);
                 break;
 
             case OPERATOR: {
@@ -61,28 +62,28 @@ void shuntingYard(Token *tokens, Token *outputQueue, Token *opStack , double *ev
                        (getPriority(opStack[opTop].str) > getPriority(t.str) ||
                        (getPriority(opStack[opTop].str) == getPriority(t.str) &&
                        getAssociativity(t.str) == LEFT))) {
-                    outputQueue[outputCount++] = popOp(opStack, &opTop);
+                    outputQueue[outputCount++] = popOp(opStack, opTop);
                 }
-                pushOp(t, opStack, &opTop);
+                pushOp(t, opStack, opTop);
                 break;
             }
 
             case LEFTPAREN:
-                pushOp(t, opStack, &opTop);
+                pushOp(t, opStack, opTop);
                 break;
 
             case RIGHTPAREN:
                 while (opTop >= 0 && opStack[opTop].type != LEFTPAREN) {
-                    outputQueue[outputCount++] = popOp(opStack, &opTop);
+                    outputQueue[outputCount++] = popOp(opStack, opTop);
                 }
                 if (opTop < 0) {
                     fprintf(stderr, "Erreur: Parenthèses non équilibrées\n");
                     exit(1);
                 }
-                popOp(opStack, &opTop); // Delete '('
+                popOp(opStack, opTop); // Delete '('
 
                 if (opTop >= 0 && opStack[opTop].type == FUNCTION) {
-                    outputQueue[outputCount++] = popOp(opStack, &opTop);
+                    outputQueue[outputCount++] = popOp(opStack, opTop);
                 }
                 break;
         }
@@ -94,26 +95,25 @@ void shuntingYard(Token *tokens, Token *outputQueue, Token *opStack , double *ev
             fprintf(stderr, "Erreur: Parenthèses non équilibrées\n");
             exit(1);
         }
-        outputQueue[outputCount++] = popOp(opStack, &opTop);
+        outputQueue[outputCount++] = popOp(opStack, opTop);
     }
 
-   /* shuntingYardReturn result;
-    result.tokenCount=tokenCount;
+    shuntingYardReturn result;
+    result.tokenCount=outputCount;
 
     int tokensArrayLength = sizeof(tokens) / sizeof(tokens[0]); // Calcul de la taille
     int outputQueueArrayLength = sizeof(outputQueue) / sizeof(outputQueue[0]); // Calcul de la taille
         // Boucle for pour parcourir le tableau
         for (int i = 0; i < tokensArrayLength; i++) {
             // Instructions à exécuter pour chaque élément
-           result.tokens[i]=tokens[i]
+           result.tokens[i]=tokens[i];
         }
 
          for (int i = 0; i < outputQueueArrayLength; i++) {
             // Instructions à exécuter pour chaque élément
-           result.outputQueue[i]=tokens[i]
+           result.outputQueue[i]=outputQueue[i];
         }
 
-       return result;*/
+       return result;
 
-       exit(0);
 }

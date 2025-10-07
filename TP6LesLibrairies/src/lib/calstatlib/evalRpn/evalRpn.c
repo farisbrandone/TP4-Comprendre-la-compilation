@@ -18,44 +18,45 @@ int evalTop = -1;*/
 
 // Fonctions of pile
 
-void pushEval(double val, double *evalStack,int *evalTop) { evalStack[++*evalTop] = val; }
-double popEval(double *evalStack, int *evalTop) { return evalStack[*evalTop--];}
+void pushEval(double val, double *evalStack,int evalTop) { evalStack[++evalTop] = val; }
+double popEval(double *evalStack, int evalTop) { return evalStack[evalTop--];}
 
 // RPN Evaluation
-double evalRpn(Token *outputQueue, double *evalStack, int *outputCount) {
+double evalRpn(Token *outputQueue, double *evalStack, int outputCount) {
+         printf("Inside evalRpn with Integer: %d, Double: %lf\n", outputCount, *evalStack);
   int  evalTop = -1;
 
-    for (int i = 0; i < *outputCount; i++) {
+    for (int i = 0; i < outputCount; i++) {
         Token t = outputQueue[i];
 
         switch (t.type) {
             case NUMBER:
-                pushEval(t.value, evalStack, &evalTop);
+                pushEval(t.value, evalStack, evalTop);
                 break;
 
             case OPERATOR:
                 if (strcmp(t.str, "u") == 0) {
-                    pushEval(-popEval(evalStack, &evalTop), evalStack, &evalTop);
+                    pushEval(-popEval(evalStack, evalTop), evalStack, evalTop);
                 } else {
-                    double b = popEval(evalStack, &evalTop);
-                    double a = popEval(evalStack, &evalTop);
+                    double b = popEval(evalStack, evalTop);
+                    double a = popEval(evalStack, evalTop);
 
-                    if (strcmp(t.str, "+") == 0) pushEval(a + b, evalStack, &evalTop);
-                    else if (strcmp(t.str, "-") == 0) pushEval(a - b, evalStack, &evalTop);
-                    else if (strcmp(t.str, "*") == 0) pushEval(a * b, evalStack, &evalTop);
+                    if (strcmp(t.str, "+") == 0) pushEval(a + b, evalStack, evalTop);
+                    else if (strcmp(t.str, "-") == 0) pushEval(a - b, evalStack, evalTop);
+                    else if (strcmp(t.str, "*") == 0) pushEval(a * b, evalStack, evalTop);
                     else if (strcmp(t.str, "/") == 0) {
                         if (b == 0) {
                             fprintf(stderr, "Erreur: Division par zéro\n");
                             exit(1);
                         }
-                        pushEval(a / b, evalStack, &evalTop);
+                        pushEval(a / b, evalStack, evalTop);
                     }
-                    else if (strcmp(t.str, "^") == 0) pushEval(pow(a, b), evalStack, &evalTop);
+                    else if (strcmp(t.str, "^") == 0) pushEval(pow(a, b), evalStack, evalTop);
                 }
                 break;
 
             case FUNCTION:
-                double arg = popEval(evalStack, &evalTop);
+                double arg = popEval(evalStack, evalTop);
                 double res;
 
                 if (strcmp(t.str, "sin") == 0) res = sin(arg);
@@ -73,7 +74,7 @@ double evalRpn(Token *outputQueue, double *evalStack, int *outputCount) {
                     fprintf(stderr, "Fonction non supportée: %s\n", t.str);
                     exit(1);
                 }
-                pushEval(res, evalStack, &evalTop);
+                pushEval(res, evalStack, evalTop);
                 break;
         }
     }
@@ -83,5 +84,5 @@ double evalRpn(Token *outputQueue, double *evalStack, int *outputCount) {
         exit(1);
     }
 
-    return popEval(evalStack, &evalTop);
+    return popEval(evalStack, evalTop);
 }

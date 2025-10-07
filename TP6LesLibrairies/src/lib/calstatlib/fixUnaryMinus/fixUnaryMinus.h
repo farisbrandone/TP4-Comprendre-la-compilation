@@ -23,8 +23,8 @@ typedef struct {
 typedef struct  {
     Token tokens[MAXTOKENS];
     int tokenCount;
-    } TokenizeReturn;
+    } fixUnaryReturn;
 
-void fixUnaryMinus(Token *tokens, int *tokenCount);
+fixUnaryReturn fixUnaryMinus(Token *tokens, int tokenCount);
 
 #endif

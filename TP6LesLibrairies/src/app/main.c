@@ -1,50 +1,21 @@
-#include "tokenize.h"
 #include "fixUnaryMinus.h"
 #include "shuntingYard.h"
 #include "evalRpn.h"
+#include "tokenize.h"
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
 
-
-  char expr[256];
-  Token tokens[MAXTOKENS];
-  Token outputQueue[MAXTOKENS];
-  Token opStack[MAXSTACK];
-  double evalStack[MAXSTACK];
-
-  int tokenCount = 0;
-  int outputCount = 0;
-  int opTop = -1;
-  int evalTop = -1;
-
-  typedef struct  {
-    Token tokens[MAXTOKENS];
-    int tokenCount;
-    } fixUnaryReturn;
-
-typedef struct  {
-    Token tokens[MAXTOKENS];
-    Token outputQueue[MAXTOKENS];
-    int tokenCount;
-    } shuntingYardReturn;
-
-
-
 int main() {
-
+    char expr[256];
 
     printf("o ---- o ---- o ---- o ---- o ---- o ---- o\n");
-     usleep(1000000);
-    printf("|");
-    printf("                                         ");
-    printf("|\n");
+    usleep(1000000);
+    printf("|                                         |\n");
     usleep(1000000);
     printf("o      Super calculateur FARIS-G200       o\n");
     usleep(1000000);
-    printf("|");
-    printf("                                         ");
-    printf("|\n");
+    printf("|                                         |\n");
     usleep(1000000);
     printf("o ---- o ---- o ---- o ---- o ---- o ---- o\n\n");
     usleep(1000000);
@@ -55,9 +26,9 @@ int main() {
     printf("- Opérations simple(+, -, *, /)\n");
     usleep(1000000);
     printf("- Trigonométrie(cos, sin, tan)\n");
-     usleep(1000000);
+    usleep(1000000);
     printf("- Fonction logarithmique\n\n");
-     usleep(1000000);
+    usleep(1000000);
     printf("Exemple d'entrée d'opération à faire:\n");
     usleep(1000000);
     printf("(2*cos(30)+3)/2\n\n");
@@ -71,54 +42,40 @@ int main() {
         return 1;
     }
 
-    // Delete break line
+    // Supprimer le saut de ligne
     expr[strcspn(expr, "\n")] = 0;
 
-   TokenizeReturn tokenResult = tokenize(expr, tokens);
+    // Tokenization
+    TokenizeReturn tokenResult = tokenize(expr);
+    printf("TokenCount: %d\n", tokenResult.tokenCount);
 
-
-        printf("TokenCount: %d\n", tokenResult.tokenCount);
-           int tokensArrayLength = sizeof(tokenResult.tokens) / sizeof(tokenResult.tokens[0]); // Calcul de la taille
-
-        // Boucle for pour parcourir le tableau
-        for (int i = 0; i < tokensArrayLength; i++) {
-            // Instructions à exécuter pour chaque élément
-              printf("TokenArray: %f\n", tokenResult.tokens[i].value );
-
-        }
-
-         // Create tokenResult-like structure
-    fixUnaryReturn tokenVariable;
-    tokenVariable.tokenCount = 2;
-    for (int i = 0; i < tokensArrayLength; i++) {
-        tokenVariable.tokens[i] = tokenResult.tokens[i];
+    // Afficher les tokens
+    for (int i = 0; i < tokenResult.tokenCount; i++) {
+        printf("Token %d: type=%d, str=%s, value=%.2f\n",
+               i, tokenResult.tokens[i].type, tokenResult.tokens[i].str, tokenResult.tokens[i].value);
     }
 
+    // Fix unary minus
+    fixUnaryReturn fixUnaryMinusResult = fixUnaryMinus(tokenResult.tokens, tokenResult.tokenCount);
+    printf("fixUnaryMinusCount: %d\n", fixUnaryMinusResult.tokenCount);
 
-    fixUnaryReturn fixUnaryMinusResult = fixUnaryMinus(tokenVariable.tokens, tokenVariable.tokenCount);
+    for (int i = 0; i < fixUnaryMinusResult.tokenCount; i++) {
+        printf("fixUnaryMinusToken %d: type=%d, str=%s, value=%.2f\n",
+               i, fixUnaryMinusResult.tokens[i].type, fixUnaryMinusResult.tokens[i].str, fixUnaryMinusResult.tokens[i].value);
+    }
 
-            printf("fixUnaryMinusCount: %d\n", fixUnaryMinusResult.tokenCount);
-           int tokensArrayLength1 = sizeof(fixUnaryMinusResult.tokens) / sizeof(fixUnaryMinusResult.tokens[0]); // Calcul de la taille
+    // Shunting Yard
+    shuntingYardReturn shuntingYardResult = shuntingYard(fixUnaryMinusResult.tokens, fixUnaryMinusResult.tokenCount);
+    printf("shuntingYardOutputCount: %d\n", shuntingYardResult.outputCount);
 
-        // Boucle for pour parcourir le tableau
-        for (int i = 0; i < tokensArrayLength1; i++) {
-            // Instructions à exécuter pour chaque élément
-              printf("fixUnaryMinusArray: %f\n", fixUnaryMinusResult.tokens[i].value );
+    for (int i = 0; i < shuntingYardResult.outputCount; i++) {
+        printf("shuntingYardOutput %d: type=%d, str=%s, value=%.2f\n",
+               i, shuntingYardResult.outputQueue[i].type, shuntingYardResult.outputQueue[i].str, shuntingYardResult.outputQueue[i].value);
+    }
 
-        }
+    // Évaluation RPN
+    double result = evalRpn(shuntingYardResult.outputQueue, shuntingYardResult.outputCount);
+    printf("Résultat final: %f\n", result);
 
-  shuntingYardReturn shuntingYardResult = shuntingYard(fixUnaryMinusResult.tokens, outputQueue, opStack ,tokenCount, evalTop);
-
-               int tokensArrayLength2 = sizeof(shuntingYardResult.tokens) / sizeof(shuntingYardResult.tokens[0]); // Calcul de la taille
-
-          printf("shuntingYardLength: %d\n", tokensArrayLength2 );
-        // Boucle for pour parcourir le tableau
-        for (int i = 0; i < tokensArrayLength2; i++) {
-            // Instructions à exécuter pour chaque élément
-              printf("shuntingYardArray: %f\n", shuntingYardResult.tokens[i].value );
-        }
-
-    double result = evalRpn(shuntingYardResult.outputQueue, evalStack, shuntingYardResult.tokenCount);
-    printf("Résultat: %f\n", result);
     return 0;
 }

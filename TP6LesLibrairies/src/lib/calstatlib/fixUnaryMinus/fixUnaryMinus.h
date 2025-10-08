@@ -1,29 +1,12 @@
-#ifndef FUNCTIONS_H
-#define FUNCTIONS_H
+#ifndef FIX_UNARY_MINUS_H
+#define FIX_UNARY_MINUS_H
 
-#include <stdbool.h>
-
-#define MAXTOKENS 100
-#define MAXSTACK 100
-
-typedef enum {
-    NUMBER,
-    OPERATOR,
-    FUNCTION,
-    LEFTPAREN,
-    RIGHTPAREN
-} TokenType;
+#include "tokenType.h"
 
 typedef struct {
-    TokenType type;
-    char str[32];
-    double value;
-} Token;
-
-typedef struct  {
     Token tokens[MAXTOKENS];
     int tokenCount;
-    } fixUnaryReturn;
+} fixUnaryReturn;
 
 fixUnaryReturn fixUnaryMinus(Token *tokens, int tokenCount);
 

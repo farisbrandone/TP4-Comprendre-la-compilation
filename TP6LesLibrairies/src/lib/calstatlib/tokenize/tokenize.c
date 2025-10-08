@@ -1,4 +1,3 @@
-
 #include "tokenize.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -6,22 +5,20 @@
 #include <ctype.h>
 #include <math.h>
 
-// Global variables for tokens
-/*Token tokens[MAXTOKENS];
+TokenizeReturn tokenize(const char* expr) {
+    fprintf(stderr, "Inside Tokenize with '%s'\n", expr);
 
-int tokenCount = 0;*/
-
-
-// Tokenisation
-TokenizeReturn tokenize(const char* expr, Token *tokens) {
-     fprintf(stderr,"Inside Tokenize with '%c'\n", *expr);
     const char* p = expr;
-   int tokenCount = 0;
+    TokenizeReturn result;
+    result.tokenCount = 0;  // Initialiser le compteur
 
-    while (*p) {
-        if (isspace(*p)) { p++; continue; }
+    while (*p && result.tokenCount < MAXTOKENS) {
+        if (isspace(*p)) {
+            p++;
+            continue;
+        }
 
-        // Nombers
+        // Numbers
         if (isdigit(*p) || *p == '.') {
             char numStr[32] = {0};
             int i = 0;
@@ -29,38 +26,41 @@ TokenizeReturn tokenize(const char* expr, Token *tokens) {
             while (*p && (isdigit(*p) || *p == '.' ||
                    *p == 'e' || *p == 'E' ||
                    ((*p == '-' || *p == '+') && (i > 0 && (numStr[i-1] == 'e' || numStr[i-1] == 'E'))))) {
-                numStr[i++] = *p++;
+                if (i < 31) {  // Éviter le débordement
+                    numStr[i++] = *p;
+                }
+                p++;
             }
 
-            tokens[tokenCount].type = NUMBER;
-            tokens[tokenCount].value = atof(numStr);
-            tokenCount++;
+            result.tokens[result.tokenCount].type = NUMBER;
+            result.tokens[result.tokenCount].value = atof(numStr);
+            result.tokenCount++;
             continue;
         }
 
         // Operators
         if (strchr("+-*/^", *p)) {
-            tokens[tokenCount].type = OPERATOR;
-            tokens[tokenCount].str[0] = *p;
-            tokens[tokenCount].str[1] = '\0';
-            tokenCount++;
+            result.tokens[result.tokenCount].type = OPERATOR;
+            result.tokens[result.tokenCount].str[0] = *p;
+            result.tokens[result.tokenCount].str[1] = '\0';
+            result.tokenCount++;
             p++;
             continue;
         }
 
-        // Brackets
+        // Parentheses
         if (*p == '(') {
-            tokens[tokenCount].type = LEFTPAREN;
-            strcpy(tokens[tokenCount].str, "(");
-            tokenCount++;
+            result.tokens[result.tokenCount].type = LEFTPAREN;
+            strcpy(result.tokens[result.tokenCount].str, "(");
+            result.tokenCount++;
             p++;
             continue;
         }
 
         if (*p == ')') {
-            tokens[tokenCount].type = RIGHTPAREN;
-            strcpy(tokens[tokenCount].str, ")");
-            tokenCount++;
+            result.tokens[result.tokenCount].type = RIGHTPAREN;
+            strcpy(result.tokens[result.tokenCount].str, ")");
+            result.tokenCount++;
             p++;
             continue;
         }
@@ -70,31 +70,19 @@ TokenizeReturn tokenize(const char* expr, Token *tokens) {
             char func[32] = {0};
             int i = 0;
 
-            while (isalpha(*p)) {
+            while (isalpha(*p) && i < 31) {
                 func[i++] = *p++;
             }
 
-            tokens[tokenCount].type = FUNCTION;
-            strcpy(tokens[tokenCount].str, func);
-            tokenCount++;
+            result.tokens[result.tokenCount].type = FUNCTION;
+            strcpy(result.tokens[result.tokenCount].str, func);
+            result.tokenCount++;
             continue;
         }
 
         fprintf(stderr, "Erreur: Caractère non reconnu '%c'\n", *p);
-
-
         exit(1);
     }
-      TokenizeReturn result;
 
-        result.tokenCount=tokenCount;
-        int tokensArrayLength = sizeof(tokens) / sizeof(tokens[0]); // Calcul de la taille
-
-        // Boucle for pour parcourir le tableau
-        for (int i = 0; i < tokensArrayLength; i++) {
-            // Instructions à exécuter pour chaque élément
-           result.tokens[i]=tokens[i];
-        }
-
-       return result;
+    return result;
 }

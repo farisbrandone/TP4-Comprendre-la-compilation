@@ -1,4 +1,3 @@
-
 #include "fixUnaryMinus.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -6,30 +5,27 @@
 #include <ctype.h>
 #include <math.h>
 
-// Global variables for tokens
+fixUnaryReturn fixUnaryMinus(Token *tokens, int tokenCount) {
+    printf("Inside fixUnaryMinus with tokenCount: %d\n", tokenCount);
 
+    fixUnaryReturn result;
+    result.tokenCount = tokenCount;
 
-// Unary minus
-fixUnaryReturn fixUnaryMinus(Token *tokens, int tokenCount ) {
-      printf("Inside fixUnaryMinus with Integer: %d\n", tokenCount);
+    // Copier les tokens d'entrée vers la sortie
     for (int i = 0; i < tokenCount; i++) {
-        if (strcmp(tokens[i].str, "-") == 0) {
-            if (i == 0 || tokens[i-1].type == OPERATOR || tokens[i-1].type == LEFTPAREN) {
-                strcpy(tokens[i].str, "u");
+        result.tokens[i] = tokens[i];
+    }
+
+    // Appliquer la correction du moins unaire
+    for (int i = 0; i < tokenCount; i++) {
+        if (strcmp(result.tokens[i].str, "-") == 0) {
+            if (i == 0 ||
+                result.tokens[i-1].type == OPERATOR ||
+                result.tokens[i-1].type == LEFTPAREN) {
+                strcpy(result.tokens[i].str, "u");
             }
         }
     }
 
-    fixUnaryReturn result;
-    result.tokenCount=tokenCount;
-    int tokensArrayLength = sizeof(tokens) / sizeof(tokens[0]); // Calcul de la taille
-          printf("tokensArrayLength: %d\n", tokensArrayLength);
-        // Boucle for pour parcourir le tableau
-    for (int i = 0; i < tokensArrayLength; i++) {
-            // Instructions à exécuter pour chaque élément
-         result.tokens[i]=tokens[i];
-    }
-
     return result;
-
 }

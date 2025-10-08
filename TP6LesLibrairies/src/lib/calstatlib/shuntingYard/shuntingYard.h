@@ -1,31 +1,15 @@
-#ifndef FUNCTIONS_H
-#define FUNCTIONS_H
+#ifndef SHUNTING_YARD_H
+#define SHUNTING_YARD_H
 
 #include <stdbool.h>
-
-#define MAXTOKENS 100
-#define MAXSTACK 100
-
-typedef enum {
-    NUMBER,
-    OPERATOR,
-    FUNCTION,
-    LEFTPAREN,
-    RIGHTPAREN
-} TokenType;
+#include "tokenType.h"
 
 typedef struct {
-    TokenType type;
-    char str[32];
-    double value;
-} Token;
-
-typedef struct  {
-    Token tokens[MAXTOKENS];
     Token outputQueue[MAXTOKENS];
-    int tokenCount;
-    } shuntingYardReturn;
+    int outputCount;
+} shuntingYardReturn;
 
-shuntingYardReturn shuntingYard(Token *tokens, Token *outputQueue, Token *opStack  ,int tokenCount, int evalTop);
+// Prototype simplifié - la fonction gère ses propres piles
+shuntingYardReturn shuntingYard(Token *tokens, int tokenCount);
 
 #endif

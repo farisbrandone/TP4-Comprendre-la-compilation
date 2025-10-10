@@ -1,2 +1,1 @@
-/usr/bin/ar qc libevalRpn.a CMakeFiles/evalRpn.dir/src/lib/calstatlib/evalRpn/evalRpn.c.o
-/usr/bin/ranlib libevalRpn.a
+/usr/bin/cc -fPIC  -g -shared -Wl,-soname,libevalRpn.so -o buildForDynamiqueLib/evalRpn/libevalRpn.so CMakeFiles/evalRpn.dir/src/lib/calstatlib/evalRpn/evalRpn.c.o  -lm 

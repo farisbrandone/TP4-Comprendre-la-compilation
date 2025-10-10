@@ -7,20 +7,16 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g")
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-# Répertoires
+# Répertoires personnalisés
 set(DYNAMIC_BUILD_DIR ${CMAKE_BINARY_DIR}/buildForDynamiqueLib)
 set(BIN_DIR ${CMAKE_BINARY_DIR}/bin)
 
-# Configuration des outputs
+# Configuration des outputs par cible
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${DYNAMIC_BUILD_DIR})
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${DYNAMIC_BUILD_DIR})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${BIN_DIR})
 
-# IMPORTANT: Configuration du RPATH
-set(CMAKE_BUILD_RPATH_USE_ORIGIN TRUE)
-set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-
-# Création des bibliothèques dans des sous-répertoires spécifiques
+# Fonction pour créer une librairie dynamique avec ses includes
 function(add_dynamic_library lib_name source_file)
     add_library(${lib_name} SHARED ${source_file})
 
@@ -30,19 +26,19 @@ function(add_dynamic_library lib_name source_file)
         ARCHIVE_OUTPUT_DIRECTORY ${DYNAMIC_BUILD_DIR}/${lib_name}
     )
 
-    # Includes
+    # Includes publics
     target_include_directories(${lib_name} PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/calstatlib/${lib_name}
         ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/calstatlib/tokenType
     )
 
-    # Dépendances mathématiques
+    # Gestion des dépendances mathématiques
     if(${lib_name} STREQUAL "evalRpn" OR ${lib_name} STREQUAL "tokenize")
         target_link_libraries(${lib_name} m)
     endif()
 endfunction()
 
-# Création des bibliothèques
+# Création des bibliothèques dynamiques
 add_dynamic_library(evalRpn src/lib/calstatlib/evalRpn/evalRpn.c)
 add_dynamic_library(fixUnaryMinus src/lib/calstatlib/fixUnaryMinus/fixUnaryMinus.c)
 add_dynamic_library(shuntingYard src/lib/calstatlib/shuntingYard/shuntingYard.c)
@@ -51,13 +47,14 @@ add_dynamic_library(tokenize src/lib/calstatlib/tokenize/tokenize.c)
 # Exécutable
 add_executable(exeWithDynLib src/app/main.c)
 
-# Includes pour l'exécutable
+# Configuration des includes pour l'exécutable
 target_include_directories(exeWithDynLib PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/calstatlib/tokenize
     ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/calstatlib/shuntingYard
     ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/calstatlib/fixUnaryMinus
     ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/calstatlib/evalRpn
     ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/calstatlib/tokenType
+    # Inclure les répertoires de build pour les headers générés si nécessaire
 )
 
 # Liaison des bibliothèques
@@ -69,21 +66,27 @@ target_link_libraries(exeWithDynLib
     m
 )
 
-# CONFIGURATION CRITIQUE DU RPATH
-if(UNIX)
-    message(STATUS "Bibliothèques dynamiques seront construites dans: ${BIN_DIR}")
-message(STATUS "Exécutable sera construit dans: ${BIN_DIR}")
-    # Utiliser $ORIGIN pour un chemin relatif à l'exécutable
+# Configuration RPATH pour le développement
+if(UNIX AND NOT APPLE)
+    # Utiliser RPATH pour trouver les libs dans le build directory
     set_target_properties(exeWithDynLib PROPERTIES
+        INSTALL_RPATH "$ORIGIN/../buildForDynamiqueLib"
         BUILD_WITH_INSTALL_RPATH FALSE
         SKIP_BUILD_RPATH FALSE
-        BUILD_RPATH "$ORIGIN/../buildForDynamiqueLib/evalRpn:$ORIGIN/../buildForDynamiqueLib/fixUnaryMinus:$ORIGIN/../buildForDynamiqueLib/shuntingYard:$ORIGIN/../buildForDynamiqueLib/tokenize"
     )
+
+    # Ajouter les chemins des bibliothèques au RPATH
+    foreach(lib evalRpn fixUnaryMinus shuntingYard tokenize)
+        set_target_properties(exeWithDynLib PROPERTIES
+            BUILD_RPATH "${DYNAMIC_BUILD_DIR}/${lib};${BUILD_RPATH}"
+        )
+    endforeach()
 endif()
 
-# Cible pour tester l'exécution
+# Cible pour exécuter le programme
 add_custom_target(run
-    COMMAND ${BIN_DIR}/exeWithDynLib
+    COMMAND ./exeWithDynLib
+    WORKING_DIRECTORY ${BIN_DIR}
     DEPENDS exeWithDynLib
-    COMMENT "Exécution du programme"
+    COMMENT "Exécution du programme avec bibliothèques dynamiques"
 )

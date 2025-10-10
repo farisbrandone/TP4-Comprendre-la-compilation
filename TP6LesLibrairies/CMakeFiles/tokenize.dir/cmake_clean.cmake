@@ -1,8 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/tokenize.dir/src/lib/calstatlib/tokenize/tokenize.c.o"
   "CMakeFiles/tokenize.dir/src/lib/calstatlib/tokenize/tokenize.c.o.d"
-  "libtokenize.a"
-  "libtokenize.pdb"
+  "buildForDynamiqueLib/tokenize/libtokenize.pdb"
+  "buildForDynamiqueLib/tokenize/libtokenize.so"
 )
 
 # Per-language clean rules from dependency scanning.

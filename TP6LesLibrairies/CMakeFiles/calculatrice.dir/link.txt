@@ -1,1 +1,0 @@
-/usr/bin/cc  -g -g CMakeFiles/calculatrice.dir/src/app/main.c.o -o src/bin/calculatrice  libevalRpn.a libfixUnaryMinus.a libshuntingYard.a libtokenize.a -lm 

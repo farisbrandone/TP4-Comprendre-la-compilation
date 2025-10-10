@@ -1,8 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/evalRpn.dir/src/lib/calstatlib/evalRpn/evalRpn.c.o"
   "CMakeFiles/evalRpn.dir/src/lib/calstatlib/evalRpn/evalRpn.c.o.d"
-  "libevalRpn.a"
-  "libevalRpn.pdb"
+  "buildForDynamiqueLib/evalRpn/libevalRpn.pdb"
+  "buildForDynamiqueLib/evalRpn/libevalRpn.so"
 )
 
 # Per-language clean rules from dependency scanning.

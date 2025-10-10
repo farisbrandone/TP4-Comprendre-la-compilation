@@ -6,5 +6,5 @@ C_DEFINES =
 
 C_INCLUDES = -I/home/vboxuser/training-linux/TP4-Comprendre-la-compilation/TP6LesLibrairies/src/lib/calstatlib/tokenize -I/home/vboxuser/training-linux/TP4-Comprendre-la-compilation/TP6LesLibrairies/src/lib/calstatlib/shuntingYard -I/home/vboxuser/training-linux/TP4-Comprendre-la-compilation/TP6LesLibrairies/src/lib/calstatlib/fixUnaryMinus -I/home/vboxuser/training-linux/TP4-Comprendre-la-compilation/TP6LesLibrairies/src/lib/calstatlib/evalRpn -I/home/vboxuser/training-linux/TP4-Comprendre-la-compilation/TP6LesLibrairies/src/lib/calstatlib/tokenType
 
-C_FLAGS =  -g -g
+C_FLAGS =  -g -fPIE -std=gnu11
 

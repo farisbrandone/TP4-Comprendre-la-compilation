@@ -1,2 +1,1 @@
-/usr/bin/ar qc libfixUnaryMinus.a CMakeFiles/fixUnaryMinus.dir/src/lib/calstatlib/fixUnaryMinus/fixUnaryMinus.c.o
-/usr/bin/ranlib libfixUnaryMinus.a
+/usr/bin/cc -fPIC  -g -shared -Wl,-soname,libfixUnaryMinus.so -o buildForDynamiqueLib/fixUnaryMinus/libfixUnaryMinus.so CMakeFiles/fixUnaryMinus.dir/src/lib/calstatlib/fixUnaryMinus/fixUnaryMinus.c.o 

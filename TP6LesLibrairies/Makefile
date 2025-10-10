@@ -169,24 +169,37 @@ tokenize/fast:
 .PHONY : tokenize/fast
 
 #=============================================================================
-# Target rules for targets named calculatrice
+# Target rules for targets named exeWithDynLib
 
 # Build rule for target.
-calculatrice: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 calculatrice
-.PHONY : calculatrice
+exeWithDynLib: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 exeWithDynLib
+.PHONY : exeWithDynLib
 
 # fast build rule for target.
-calculatrice/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/calculatrice.dir/build.make CMakeFiles/calculatrice.dir/build
-.PHONY : calculatrice/fast
+exeWithDynLib/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/exeWithDynLib.dir/build.make CMakeFiles/exeWithDynLib.dir/build
+.PHONY : exeWithDynLib/fast
+
+#=============================================================================
+# Target rules for targets named run
+
+# Build rule for target.
+run: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 run
+.PHONY : run
+
+# fast build rule for target.
+run/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run.dir/build.make CMakeFiles/run.dir/build
+.PHONY : run/fast
 
 src/app/main.o: src/app/main.c.o
 .PHONY : src/app/main.o
 
 # target to build an object file
 src/app/main.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/calculatrice.dir/build.make CMakeFiles/calculatrice.dir/src/app/main.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/exeWithDynLib.dir/build.make CMakeFiles/exeWithDynLib.dir/src/app/main.c.o
 .PHONY : src/app/main.c.o
 
 src/app/main.i: src/app/main.c.i
@@ -194,7 +207,7 @@ src/app/main.i: src/app/main.c.i
 
 # target to preprocess a source file
 src/app/main.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/calculatrice.dir/build.make CMakeFiles/calculatrice.dir/src/app/main.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/exeWithDynLib.dir/build.make CMakeFiles/exeWithDynLib.dir/src/app/main.c.i
 .PHONY : src/app/main.c.i
 
 src/app/main.s: src/app/main.c.s
@@ -202,7 +215,7 @@ src/app/main.s: src/app/main.c.s
 
 # target to generate assembly for a file
 src/app/main.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/calculatrice.dir/build.make CMakeFiles/calculatrice.dir/src/app/main.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/exeWithDynLib.dir/build.make CMakeFiles/exeWithDynLib.dir/src/app/main.c.s
 .PHONY : src/app/main.c.s
 
 src/lib/calstatlib/evalRpn/evalRpn.o: src/lib/calstatlib/evalRpn/evalRpn.c.o
@@ -309,8 +322,9 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... calculatrice"
+	@echo "... run"
 	@echo "... evalRpn"
+	@echo "... exeWithDynLib"
 	@echo "... fixUnaryMinus"
 	@echo "... shuntingYard"
 	@echo "... tokenize"

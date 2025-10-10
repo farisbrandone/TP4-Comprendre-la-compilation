@@ -1,2 +1,1 @@
-/usr/bin/ar qc libshuntingYard.a CMakeFiles/shuntingYard.dir/src/lib/calstatlib/shuntingYard/shuntingYard.c.o
-/usr/bin/ranlib libshuntingYard.a
+/usr/bin/cc -fPIC  -g -shared -Wl,-soname,libshuntingYard.so -o buildForDynamiqueLib/shuntingYard/libshuntingYard.so CMakeFiles/shuntingYard.dir/src/lib/calstatlib/shuntingYard/shuntingYard.c.o 

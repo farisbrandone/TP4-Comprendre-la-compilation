@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/vboxuser/training-linux/TP4-Comprendre-la-compilation/TP6LesLibrairies/src/app/main.c" "CMakeFiles/calculatrice.dir/src/app/main.c.o" "gcc" "CMakeFiles/calculatrice.dir/src/app/main.c.o.d"
+  "/home/vboxuser/training-linux/TP4-Comprendre-la-compilation/TP6LesLibrairies/src/app/main.c" "CMakeFiles/exeWithDynLib.dir/src/app/main.c.o" "gcc" "CMakeFiles/exeWithDynLib.dir/src/app/main.c.o.d"
   )
 
 # Targets to which this target links.

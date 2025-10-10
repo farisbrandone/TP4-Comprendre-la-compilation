@@ -1,8 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/fixUnaryMinus.dir/src/lib/calstatlib/fixUnaryMinus/fixUnaryMinus.c.o"
   "CMakeFiles/fixUnaryMinus.dir/src/lib/calstatlib/fixUnaryMinus/fixUnaryMinus.c.o.d"
-  "libfixUnaryMinus.a"
-  "libfixUnaryMinus.pdb"
+  "buildForDynamiqueLib/fixUnaryMinus/libfixUnaryMinus.pdb"
+  "buildForDynamiqueLib/fixUnaryMinus/libfixUnaryMinus.so"
 )
 
 # Per-language clean rules from dependency scanning.

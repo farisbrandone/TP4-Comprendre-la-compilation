@@ -1,0 +1,2 @@
+/usr/bin/ar qc libshuntingYard.a CMakeFiles/shuntingYard.dir/src/lib/calstatlib/shuntingYard/shuntingYard.c.o
+/usr/bin/ranlib libshuntingYard.a

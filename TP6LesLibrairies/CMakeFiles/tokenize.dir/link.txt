@@ -1,0 +1,2 @@
+/usr/bin/ar qc libtokenize.a CMakeFiles/tokenize.dir/src/lib/calstatlib/tokenize/tokenize.c.o
+/usr/bin/ranlib libtokenize.a

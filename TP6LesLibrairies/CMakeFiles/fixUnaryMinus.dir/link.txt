@@ -1,0 +1,2 @@
+/usr/bin/ar qc libfixUnaryMinus.a CMakeFiles/fixUnaryMinus.dir/src/lib/calstatlib/fixUnaryMinus/fixUnaryMinus.c.o
+/usr/bin/ranlib libfixUnaryMinus.a

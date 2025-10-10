@@ -1,0 +1,2 @@
+/usr/bin/ar qc libevalRpn.a CMakeFiles/evalRpn.dir/src/lib/calstatlib/evalRpn/evalRpn.c.o
+/usr/bin/ranlib libevalRpn.a

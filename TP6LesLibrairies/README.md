@@ -52,13 +52,14 @@ project(Calculatrice C)
 ### La déclaration de variables :
 * set(NAME VALUE)
 * ${NAME} utiliser si on souhaite recupurer la valeur pour une utilisation par exemple afficher un message:
-  ```bash
+
+```bash
   set(NAME "HelloWorld")
 message(STATUS "La valeur de NAME est : ${NAME}")
-1. Rôle de STATUS dans la founction message
-* STATUS est un mode de message qui indique que le message est une information générale sur l'état de la configuration.
-* Les messages en mode STATUS sont affichés de manière propre et standardisée dans la sortie de CMake, généralement préfixés par -- .
-* Ils sont conçus pour informer l'utilisateur de ce qui se passe pendant la configuration, sans être intrusifs (contrairement aux erreurs ou aux avertissements).
+--Rôle de STATUS dans la founction message
+--STATUS est un mode de message qui indique que le message est une information générale sur l'état de la configuration.
+--Les messages en mode STATUS sont affichés de manière propre et standardisée dans la sortie de CMake, généralement préfixés par -- .
+--Ils sont conçus pour informer l'utilisateur de ce qui se passe pendant la configuration, sans être intrusifs (contrairement aux erreurs ou aux avertissements).
 ```
 
 * la declaration peut egalement se faire lors de l'appel à cmake via la ligne de commande lors de la generation
